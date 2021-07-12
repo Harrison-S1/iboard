@@ -1,0 +1,512 @@
+﻿Documentation for Ryan's In/Out Board v3.2 by Ryan Cartwright
+Additional Windows Information supplied by Steve Collett
+
+Latest version of Ryan's In/Out board, along with support forums etc.  can be
+found at http://www.equitasit.co.uk/ryansiob
+
+Contents
+========
+1. Introduction
+2. Features - at a glance
+3. New features (version 3.2)
+4. Updating from previous versions
+5. Legal/Licence
+6. Requirements
+7. Resources
+8. Installation - Linux/Unix
+9. Installation - Windows XP/2003
+10. Using Ryan's in/out board
+11. Troubleshooting
+12. History
+
+1. Introduction
+===============
+Ryan's In/Out Board (RyansIOB) is a PERL driven in/out board for small-medium
+size organisations that needs staff to be aware of other staff whereabouts. It
+will work for larger organisations but it may slow with larger numbers of staff.
+
+Staff are able to quickly change their status by either clicking on their name
+or calling the main script with a "name" parameter. Comments can be added to
+describe where they are. Standard comments are provided (Lunch, Leave etc.) but
+can be added to/replaced by any comment the user wishes. With the aid of a cron
+job it will also clear all staff as OUT every night, without removing any
+comments they have entered. Its displays the date/time the last change was made
+to each persons status.
+
+Although the interface is clear and simple,users can also search for the status
+of any staff member. The generated page can be automatically refreshed at your
+chosen interval and status colours are defined by you.
+
+It also displays staff internal phone numbers and you can use your own header
+and footer files.
+
+Finally, staff can be grouped into teams or departments. The resulting In/Out
+board can then be filtered by users to display just one team/department.
+
+2. Features - at a glance
+=========================
+* No database required - text files driven
+* Takes minutes to setup
+* Simple and familiar web interface - no client software required beyond a web
+browser
+* Cross-platform - runs on host of servers and clients
+* Fully customisable
+* One-click status change - even from desktop
+* Automatically checks people out overnight1
+* Standard (customisable) and user added comments can be added to user status.
+* Search feature
+* Fully customisable look and feel through config files - no HTML/CSS experience
+required.
+* Handles cross timezone situations where server is in different timezone to
+clients. 
+
+3. New features (version 3.2)
+=============================
+* The clientzone function works as described now including handling of cases
+where the date changes as a side-effect of the timezone difference.
+
+4. Updating from previous versions
+==================================
+4.1 Updating from v3.x
+======================
+Some of the changes take place in ryansiob.config.pl so you will need to
+apply your old settings to a new copy rather than simply use your 3.0 config file.
+
+4.2 Updating from < v3.0
+========================
+You cannot use your old ryansiob_config.pl file for v3 and above. There are a
+number of new options which need to be present. In particular the old "@reasons"
+(default comments) list has been replaced by the new status lists. This means
+that selecting default comments is no longer possible as they are now statuses
+instead.
+
+If you have changed your @reasons array in the config file you will need to
+divide it into those comments which indicate "in" and those which indicate
+"out". Add them to the new @instatuses and @outstatuses arrays in the config
+file accordingly.
+
+4.3 Updating from < v2.2
+========================
+If you are updating from v2.1.5 or lower then you will need to be aware of the
+new departments feature. Users can now be grouped into departments and teams and
+you can filter the board to show only the one the user chooses.
+
+If you have all your staff/users in a single team then it's probably best to
+disable the department feature. To do this set the config option
+ $ryansiob::use_dept to be 0 (zero).
+
+If you are going to use departments there are a couple of things you need to
+change.
+
+i. Change your datafile to have a number at the end of each row
+	alison|Alison|OUT|04 May / 17:34| - |Tuesday
+
+must become
+	alison|Alison|OUT|04 May / 17:34| - |Tuesday|1
+
+where the 1 is her department number.
+
+ii. Set the department names in the config file. 
+
+Edit $ryansiob::dept_names to equal your list, remembering to keep "Every" as
+the first entry (this is team zero). In addition to the departments feature the
+code has been written to be compatible with "use strict;". This means several of
+the global variables have changed. If you have tweaked your code at all – make
+sure your changes reflect the new names or you'll get a failed script.
+See ryansiob.config.pl for details of variable names.
+
+5. Legal/Licence
+================
+Ryan's In/Out Board is copyright (c) 2001-2014 Ryan P. Cartwright 
+
+Ryan's In/Out Board is released under the terms of the "GNU Public License"
+which can be found at http://www.gnu.org/copyleft/gpl.html
+
+You should have received a copy of the full licence (licence.txt) with Ryan's
+In/Out Board, if not you can download it from the address given above.
+
+Ryan's In/Out Board is provided "as is" and without any express or implied
+warranties, including, without limitation, the implied warranties of
+merchantability and fitness for a particular purpose. It was written to fulfil a
+need at my then employer but I have attempted to make it usable by other
+organisations.
+
+Note that this software was released as Whosin until release 2.0. Apparently
+"Whos-in" is a similar product released and trademarked by Hudsoft in Australia
+(I'm in the UK) and the owner has requested that I "remove all references to
+[his] product from [my] web site, and any other sources".
+
+Personally I feel that "Whos-in" is his trademark and not "Whosin" but quite
+frankly I cannot be bothered to argue so from v2.0 the name changed to "Ryan's
+In/Out Board" or RyansIOB for short. 
+
+6. Requirements
+===============
+Ryan's In/Out Board (RyansIOB) uses a simple text file as a database and thus
+requires nothing beyond the latest PERL and a web server capable of serving PERL
+cgi scripts. You will need:-
+
+* A web server (i.e. Apache, IIS)
+* PERL5 or above
+* The Date::EzDate module for PERL
+
+RyansIOB has been tested on Apache 1.3 and 2.0 running SuSE Linux (7.0 – 9.0),
+Debian (Sarge up to Squeeze). I have no reason to believe it won't work on any
+GNU/Linux system. It has also been tested on Apache on Windows XP and 98, IIS on
+Windows XP and 2003, all running Active State's Activeperl.
+
+7. Resources
+============
+Where to find the programs mentioned above, many Linux distributions have
+packages for most of these. Check with your distribution packages first.
+
+Apache
+  http://httpd.apache.org - Linux and Windows versions
+
+IIS
+  Microsoft's web server is usually supplied with "professional" versions of
+Windows, but you may have to install it. See Windows Installation later in this
+document.
+
+Perl
+	* Linux/Unix : http://www.perl.org
+	* Windows: http://www.activestate.com/Products/ActivePerl/
+
+Date-EzDate
+  This is a Perl module that is not usually supplied with PERL. 
+	* Linux/Unix (from CPAN) : http://search.cpan.org/~miko/Date-EzDate/
+	* Windows Activestate version : http://www.activestate.com/activeperl/ .
+
+8. Installation – Linux/Unix
+============================
+Note: Ensure that you have a web server, Perl and the Date-EzDate module
+installed prior to following these steps. Apache and Perl are both usually
+available as packages for Linux Distributions. The Date-EzDate module can be
+downloaded from CPAN (see above). Unpack it and install it according to its
+README.
+
+8.1. Copy the following files onto your webserver
+These should be somewhere below your web servers cgi directory, which should be
+read/executable by web users. (i.e.:/usr/local/apache/cgi-bin/ryansiob/)
+	ryansiob.pl
+	ryansiob.config.pl
+	ryansiob.search.pl
+
+8.2. Copy the following files into a separate directory on your server but not
+accessible by web users.  (i.e.: /usr/local/ryansiob/)
+datafile
+	allout.pl
+	ryansiobdoc.txt 
+
+datafile needs to be read/writeable by your web user  (i.e. www-data). allout.pl
+needs to be executable by the user who will run any cron job that calls it.
+
+8.3 Copy envelope.gif to a directory under your normal web pages (i.e.
+/usr/local/apache/htdocs/images).  Ensure envelope.gif has readable permission
+for your web user.
+
+8.4. Edit ryansiob.config.pl according to your needs. This is explained in the
+comments contained within the file.
+
+8.4a. Pay attention to the department settings. If you do not want to use
+departments (e.g. all your staff are in one team) then set $ryansiob::use_depts
+to equal 0 (zero)
+
+8.5. Edit the config line at the top of ryansiob.pl,ryansiob.search.pl and
+allout.pl. Also ensure the first line of ALL scripts (*.pl) points to your perl
+binary.  (i.e. #!/usr/bin/perl ). You can usually discover this by typing "which
+perl" into a shell.
+
+8.6. Edit datafile to match your staff list. This is a plain text file with a
+single line for each staff member. Each line should read: 
+	email_username|name|status|date/time|comments|phone|return_date|dept
+	e.g.: jsmith|john|OUT|||654||1
+
+8.7. In it's simplest starting form each line need include only the email
+username and name. From v2.3 RyansIOB supports multiple domains for email. If
+the email entry contains a '@' then RyansIOB assumes this to be a full e-mail
+address. If it does not the RyansIOB will append the contents of the $maildomain
+config setting.
+
+	jsmith|John|OUT|||654||
+will be written to the browser with the email address: jsmith@yourdomain.com
+
+whereas 
+	jsmith@otherdomain.org|John|OUT||654||
+will be written to the browser with the email address: jsmith@otherdomain.org
+
+User's names should contain underscores instead of spaces...
+	jsmith|John Smith (Head Office)|OUT|||654||1	is invalid
+	jsmith|John_Smith_(Head_Office)|OUT|||654||1	is valid
+
+It doesn't matter what order you enter the rows in - they will be sorted by the
+script before displaying. That way when you add new staff you can just add them
+to the end of the file and they'll be placed in the correct location in the
+lists when the script is run. 
+
+8.8.Take particular care to ensure that the email username field is there. Even
+if you are not using e-mail links you should ensure that there is a pipe (|)
+before each users name. e.g.:
+	|user1|OUT|||phone|
+	|user2|OUT|||phone|
+
+8.9.If you want Ryan's In/Out Board to check everyone out at night you need to
+set up a cron job for a user who can execute allout.pl. For example, on Linux
+add a line in your daily cron file like this:
+	0 0 * * * /usr/local/ryansiob/allout.pl >/dev/null 2>/dev/null
+
+9. Installation - Windows XP/2003
+==================================
+9.1.Download and install Activeperl as shown above. Once installed you will
+probably need to reboot so the environmental variable to the perl binary is
+active. 
+
+9.2.1 Once you have rebooted. Download and unzip the EzDate plug-in to a temp
+folder. Open a command shell and navigate to the folder.
+Run "ppm install Date-EzDate.ppd". It takes a little while, so wait until
+you see the "installation successful" text in the command shell.
+
+9.2.2 ALTERNATIVELY open up a shell and type “ppm”. This will open up as
+command-line UI from which you can search for “ezdate” and install the
+resulting package.
+
+9.3.Install Apache or IIS if you haven't already got a web server installed. If
+this just a local (peer to peer) network it may be easier install Apache but the
+choice is yours.
+
+9.4.Extract the ryansiob zip file to a temp folder and copy the following files
+to a folder that is under within your web facing cgi-bin. (i.e.
+c:\web_pages\cgi-bin\ryansiob)
+	ryansiob.pl
+	ryansiob.config.pl
+	ryansiob.search.pl
+
+Add permissions for IUSR account to have read access. Copy envelope.gif into the
+usual images folder for your website.
+
+9.5.Copy "datafile" to a separate folder, outside of your web facing path (i.e.
+c:\data\ryansiob\) and give IUSR write access to the folder.
+
+9.6.Copy the remaining files to a folder of your choice but not one under your
+web-facing path (i.e. C:\ryansiob\).
+
+9.7.Edit ryansiob.config.pl according to your requirements. This is explained in
+the comments contained within the file. You will have to use the format
+"C:/path_to/datafile" for both XP and 2003. "C:\path_to\datafile" will NOT work!
+Also ensure that the top line of each script (*.pl) points to your  perl
+executable. This is likely to be c:\perl\perl.exe or similar. Leave the #! in
+place.
+
+9.7a. NEW in v2.2 - pay attention to the department settings. If you do not want
+to use departments (e.g. all your staff are in one team) then set
+$ryansiob::use_depts to equal 0 (zero)
+
+9.8 IIS Users ONLY:
+------------------
+9.8.1. Open IIS Management Console. Right click on default website and select
+"New" then "Virtual directory". Follow the on screen instructions and point the
+virtual directory to the folder containing ryansiob.pl, ryansiob.config.pl and
+ryansiob.search.pl.
+
+9.8.2. Right click on the new directory and select properties. Click on
+Configuration.  In the Mappings tab add C:\Perl\bin\perl.exe and the extension
+".pl" . Using XP all should now be working fine. For Windows server 2003 follow
+step 9.9.
+
+9.9 Windows 2003 Server ONLY:
+----------------------------
+9.9.1.Open IIS Management Console. Browse "Web Service Extensions". On the left
+side of the main frame click "Add a new Web service extension". Add "Perl
+script" and under the "Required Files" section - C:\Perl\bin\perl.exe . Set Perl
+Script status to allowed.
+
+After completing the above everything should now work. If not, it is more than
+likely permissions on your IIS server. Make sure you have allowed "scripts and
+executables" and directory security is anonymous.
+
+10. Using Ryan's in/out board
+=============================
+The ryansiob.pl script can be called from any client browser that can see the
+web server and has the correct permissions. e.g. 
+	http://www.intranet.foo.com/cgi-bin/ryansiob.pl
+
+Users can also call the script with a name parameter to quickly change their
+status. e.g.
+	http://www.intranet.foo.com/cgi-bin/ryansiob.pl?name=john 
+
+In many organisations, users have a shortcut on their desktop to this URL
+enabling them to check in/out in a single (well double) click to open the page. 
+
+Statuses can be specified in the URL – see 10.2 below
+
+The search script can be called in the same way as the main script. e.g. 
+	http://www.intranet.foo.com/cgi-bin/ryansiob.search.pl
+or 	
+	http://www.intranet.foo.com/cgi-bin/ryansiob.search.pl?name=john
+
+The search script is case insensitive and automatically includes wildcards so
+searching for "jo" will bring "John" and "joan" as well as "Jo"
+Header files should not contain closing BODY, HEAD, TITLE or HTML tags - see
+sample header file at the project website for details.
+
+To sort the board by a field the user can simply click the field title.  To
+reverse sort it you can click it again. You can set the default sort field
+(usually name) in the config file.
+
+10.1 Using multiple statuses:
+-----------------------------
+From v3.0 you can have a range of statuses. They are split (in the config) file
+into "ins" and "outs". All statuses are listed (sorted as defined in the config
+file) in a drop down box and coloured accordingly.
+
+The previous option of default comments has been merged into these lists so that
+selecting one of the old "default comments" will change your status as well.
+
+By default, selecting one of these options will change your status to that and
+mark you in or out accordingly. 
+
+If you click on one of the other status change fields (as defined in the config
+file) your status will be changed to "IN" or "OUT" depending on whether your
+current status is in the "in" or "out" list. So if your status is "Lunch" and
+that is an "out" status, clicking your name will set your status to IN.
+
+Calling the script with a username will do the same behaviour as clicking one of
+the status change fields.
+
+10.2 Specifying status in the URL
+----------------------------------
+You can now give a status parameter when calling the script in a browser. If the
+status specified is in one of the defined status lists then your status will be
+changed accordingly. Otherwise the status parameter is ignored and your status
+is switched to IN or OUT accordingly.
+
+e.g.  http://www.foo.com/cgi-bin/ryansiob/ryansiob.pl?name=Fred&status=Lunch
+
+Watch out for spaces in the status in your desktop shortcuts. Try substituting
+them with %20 instead.
+
+11. Troubleshooting
+===================
+The scripts return errors where the datafile cannot be opened etc. If you can't
+get it to display in your browser try running it from a command line server
+terminal. 
+
+If you want to ask me a question I prefer the sourceforge forums as it aids
+future users.
+
+Here's a list of FAQ's from the sourceforge forum  (
+https://sourceforge.net/forum/forum.php?forum_id=407788 )
+Check there for more recent entries.
+
+Q: When I try to access ryansiob.pl through a browser I get an Apache/Webserver
+error. 
+	This is most likely a permissions problem. Check that the Apache user
+can read and execute the various perl scripts and that they can read/write the
+datafile and the directory containing it. 
+
+Q: I can view the list of users okay but when I click on the name of someone,
+nothing happens. 
+	Again, check permissions. Ensure that the Apache user can write to the
+datafile. Also ensure you have no spaces in the username column for the
+datafile... i.e. 
+	email1|user name1|OUT|||| 		is invalid 
+	email1|user_name1|OUT|||| 		is valid 
+
+Q: My server is in a different timezone to my users and the date/time is showing
+3 hours behind them.
+	Check ryansiob.config.pl for the clientzone variable and set it
+accordingly. 
+
+Q: I am getting "Premature end of script headers" from my browser / web  server
+logs?
+	Check the first line of each .pl file. This should point to the location
+of your perl binary. You can use "which perl" to finds out what this is on your
+server or ask your server admin. 
+
+Q: Can I change the default comments in the drop down box/ change the colours
+for the status? 
+	Many things about ryansiob can be changed in the config script
+(ryansiob.config.pl). Read the comments in there to see what each variable does.
+ 
+Q: Can I customise the output file so it includes my logo etc.?
+	You can, that's the idea of open source. You may not have to though. You
+can set a site header and footer file in the config script. A sample header file
+is listed in the sample files section at sourceforge. Ensure that the
+header/footer files only have opening or closing BODY and HTML tags
+respectively.
+
+Q. Can my users have email addresses on different domains?
+	Yes. Set the $maildomain config setting to be the most common domain you
+use and then enter the full email address for any user on a different domain in
+the datafile. e.g.
+	$maildomain = "yourdomain.com";
+	jsmith|John|OUT||||
+	jane@otherdomain.org|Jane|OUT||||
+
+12. History
+===========
+v3.2    Jun 2014  Fixed clientzone setting so it works as promised. Also it now
+                    takes into account situations where the timezone difference
+                    means the date will need to change too.
+v3.1	Nov 2010  Options for custom comments form at top of page and estimated
+                    return field as drop down. Department filters honoured during
+                    status updates.
+
+V3.0	Feb 2010  Status changed from binary to multiple options. Default
+                    comments removed. Status can be specified in URL. Font
+                    family added to tablerow. Optional setting to show only
+                    user's department by default
+
+v2.3	Jan 2008  E-mail links now supports multiple domains. Fixed bug
+                    with Javascript refresh section if user status is changed.
+
+V2.2	May 2007  Departments added. Sorting by fields added. Security
+                    checks added. Code tidied - now "use strict;" works!
+
+V2.1.5	Aug 2006  Minor Update - the distributed allout.pl script had
+                    corrupted characters at the end - fixed now.
+
+V2.1.4	Jul 2006  Minor Update - config script bugfix -  autorefresh meta
+                    tag was not always being printed
+
+v2.1.3	Jun 2006  Minor Update - search script bugfix -  all entries
+                    returned in place of results.
+
+V2.1.2	Mar 2006  Minor update - main script prints datafile read/write
+                    errors to web browser. HTTP headers tidied up. datafile
+                    entries now sorted alphabetically in the script.
+
+V2.1.1	Nov 2005  Minor update - couple of typo's caused errors when
+                    changing status - fixed now.
+
+V2.1	Nov 2005  Windows/IIS Installation notes added (thanks to Steve
+                    Collett for this). Added configurable items for HTML
+                    Output HTML now fully W3C compliant. Rewrote main
+                    and search scripts - common routines now called
+                    from config file. Layout order now configurable
+
+v2.0-5	Oct 2004  ryansiob.search.pl bug fix - failed to return any web
+                    content if it failed to find a match. Minor bug fix in
+                    ryansiob.pl - displaying personalised header file
+
+v2.0-4	Oct 2004  ryansiob.search.pl rewritten to tidy code and fix bugs
+
+v2.0-3	Oct 2004  Files in archive were inadvertently stored in DOS format
+                    - now in UNIX format. Minor bug fix for use of variable
+                    in void context. Envelope.gif now included in archive
+
+v2.0-2	Sep 2004  Minor bug fix - returns not being displayed
+
+v2.0-1	Sep 2004  Minor fixes to date functions
+
+v2.0	Sep 2004  Renamed "Ryan's In/Out Board" from Whosin (legal reasons)
+                    Client timezone option
+
+v1.0	Apr 2003  Full release version
+
+v0.3	Aug 2002  HTML output tidied up - showing header is now optional
+
+v0.2	Aug 2001  Initial release version
+
+v0.1	Jul 2001  Internal test version for my then employer
+--end--
