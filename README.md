@@ -10,9 +10,11 @@ Ryan's In/Out Board is an intranet based in-out board for small-medium sized org
 - Multiple statuses (meeting, in, lunch, leave etc.)
 <br>
 
-[Do it in docker](https://github.com/Harrison-S1/iboard/tree/main/Docker)
+## [Do it in docker](https://github.com/Harrison-S1/iboard/tree/main/Docker)
 <br>
 
+## Do it on a server
+<br>
 Tested on CentOS 6 & 7 and Ubuntu 16:04,18:04,20:04. Example below is for Ubuntu.<br>
 <br>
 Download the iboard repo.<br>
