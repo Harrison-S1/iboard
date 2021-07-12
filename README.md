@@ -1,4 +1,14 @@
 # iboard
+Ryan's In/Out Board is an intranet based in-out board for small-medium sized organisations. Features: one/no click status change; no database required; default & custom comments; return times; contact info; can auto check everyone out overnight.<br>
+<br>
+**Features**
+- Simple to use and deploy
+- Single click status change
+- No complex backend database
+- Fully customisable interface
+- Staff can be grouped into teams/departments
+- Multiple statuses (meeting, in, lunch, leave etc.)
+<br>
 
 Tested on CentOS 6 & 7 and Ubuntu 16:04,18:04,20:04. Example below is for Ubuntu.<br>
 <br>
