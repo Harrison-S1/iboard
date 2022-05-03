@@ -59,7 +59,7 @@ jobs:
           ln /usr/lib/cgi-bin/ryansiob/envelope.gif /var/www/html/
 
 #expose port 80 of the container
-EXPOSE 80
+#EXPOSE 80
 
 #start the container
-CMD ["apachectl", "-D", "FOREGROUND"]
+#CMD ["apachectl", "-D", "FOREGROUND"]
