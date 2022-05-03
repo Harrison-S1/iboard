@@ -25,12 +25,41 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      - name: update and upgrade contianer image 
+        run: | 
+          apt update
+          apt upgrade -y
+          apt install make curl -y
+          ARG DEBIAN_FRONTEND=noninteractive
+          ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
+          apt install apache2 -y
+          copy-r ./iboard /iboard
+          cd /iboard
+          cd CGI-4.51/; perl Makefile.PL; make; make install
+          cd ../
+          cd Date-EzDate-1.16/; perl Makefile.PL; make; make install
+          a2enmod cgi
+          mkdir -p /usr/lib/cgi-bin/ryansiob
+          cd /iboard/ryansiob
+          cp envelope.gif ryansiob.config.pl ryansiob.pl ryansiob.search.pl /usr/lib/cgi-bin/ryansiob/
+          cd /usr/lib/cgi-bin/ryansiob/
+          chown root:www-data envelope.gif
+          chmod +x /usr/lib/cgi-bin/ryansiob/*
+          cd /iboard/ryansiob
+          mkdir -p /usr/local/ryansiob/
+          cp allout.pl datafile /usr/local/ryansiob/
+          chown -R root:www-data /usr/local/ryansiob/
+          chmod -R 770 /usr/local/ryansiob/
+          ln /usr/lib/cgi-bin/ryansiob/envelope.gif /var/www/html/
+
+#expose port 80 of the container
+EXPOSE 80
+
+#start the container
+CMD ["apachectl", "-D", "FOREGROUND"]
