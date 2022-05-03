@@ -33,8 +33,6 @@ jobs:
 
       - name: update and upgrade contianer image 
         run: | 
-          apt update
-          apt upgrade -y
           apt install make curl -y
           ARG DEBIAN_FRONTEND=noninteractive
           ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
