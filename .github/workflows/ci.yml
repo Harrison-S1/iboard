@@ -33,10 +33,10 @@ jobs:
 
       - name: update and upgrade contianer image 
         run: | 
-          apt install make curl -y
+          sudo apt install make curl -y
           ARG DEBIAN_FRONTEND=noninteractive
           ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
-          apt install apache2 -y
+          sudo apt install apache2 -y
           copy-r ./iboard /iboard
           cd /iboard
           cd CGI-4.51/; perl Makefile.PL; make; make install
