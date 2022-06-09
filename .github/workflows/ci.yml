@@ -36,7 +36,29 @@ jobs:
           sudo apt install make curl -y
           sudo apt install apache2 -y
           git clone https://github.com/Harrison-S1/iboard.git
-          cd iboard/Docker/Apache/
+          cd iboard/
+                    sudo apt install make curl -y
+          sudo apt install apache2 -y
+          copy-r ./iboard /iboard
+          cd /iboard
+          cd CGI-4.51/; perl Makefile.PL; make; make install
+          cd ../
+          cd Date-EzDate-1.16/; perl Makefile.PL; make; make install
+          a2enmod cgi
+          mkdir -p /usr/lib/cgi-bin/ryansiob
+          cd /iboard/ryansiob
+          cp envelope.gif ryansiob.config.pl ryansiob.pl ryansiob.search.pl /usr/lib/cgi-bin/ryansiob/
+          cd /usr/lib/cgi-bin/ryansiob/
+          chown root:www-data envelope.gif
+          chmod +x /usr/lib/cgi-bin/ryansiob/*
+          cd /iboard/ryansiob
+          mkdir -p /usr/local/ryansiob/
+          cp allout.pl datafile /usr/local/ryansiob/
+          chown -R root:www-data /usr/local/ryansiob/
+          chmod -R 770 /usr/local/ryansiob/
+          ln /usr/lib/cgi-bin/ryansiob/envelope.gif /var/www/html/
+        # ARG DEBIAN_FRONTEND=noninteractive
+        # ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
           
         
 #expose port 80 of the container
