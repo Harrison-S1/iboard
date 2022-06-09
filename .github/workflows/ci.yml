@@ -34,8 +34,6 @@ jobs:
       - name: update and upgrade contianer image 
         run: | 
           sudo apt install make curl -y
-          ARG DEBIAN_FRONTEND=noninteractive
-          ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
           sudo apt install apache2 -y
           copy-r ./iboard /iboard
           cd /iboard
@@ -55,7 +53,9 @@ jobs:
           chown -R root:www-data /usr/local/ryansiob/
           chmod -R 770 /usr/local/ryansiob/
           ln /usr/lib/cgi-bin/ryansiob/envelope.gif /var/www/html/
-
+        # ARG DEBIAN_FRONTEND=noninteractive
+        # ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
+        
 #expose port 80 of the container
 #EXPOSE 80
 
