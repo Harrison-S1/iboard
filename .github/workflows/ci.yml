@@ -31,6 +31,8 @@ jobs:
           git clone https://github.com/Harrison-S1/iboard.git
           cd iboard/
           cd /iboard
+          uzip CGI-4.51.zip
+          uzip Date-EzDate-1.16.zip
           cd CGI-4.51/; perl Makefile.PL; make; make install
           cd ../
           cd Date-EzDate-1.16/; perl Makefile.PL; make; make install
