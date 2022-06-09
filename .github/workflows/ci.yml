@@ -35,7 +35,7 @@ jobs:
         run: | 
           sudo apt install make curl -y
           sudo apt install apache2 -y
-          copy-r ./iboard /iboard
+          cp -r ./iboard /iboard
           cd /iboard
           cd CGI-4.51/; perl Makefile.PL; make; make install
           cd ../
